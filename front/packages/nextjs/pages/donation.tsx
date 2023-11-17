@@ -18,8 +18,11 @@ const Donation: NextPage = () => {
     const randomString = require("crypto").randomBytes(32).toString("hex");
 
     if (typeof document !== "undefined") {
+
+      console.log(process.env.NEXT_PUBLIC_GATEFI_PARTNER_ID);
+
       embedInstanceSDK.current = new GateFiSDK({
-        merchantId: "9e34f479-b43a-4372-8bdf-90689e16cd5b",
+        merchantId: process.env.NEXT_PUBLIC_GATEFI_PARTNER_ID, // "9e34f479-b43a-4372-8bdf-90689e16cd5b",
         displayMode: GateFiDisplayModeEnum.Embedded,
         nodeSelector: "#embed-button",
         isSandbox: true,
@@ -35,6 +38,7 @@ const Donation: NextPage = () => {
         },
         fiatCurrencyLock: true,
         cryptoCurrencyLock: true,
+        
       });
     }
   };
