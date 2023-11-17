@@ -10,6 +10,7 @@ const selectedContractStorageKey = "scaffoldEth2.selectedContract";
 const contractNames = getContractNames();
 
 const Debug: NextPage = () => {
+  
   const [selectedContract, setSelectedContract] = useLocalStorage<ContractName>(
     selectedContractStorageKey,
     contractNames[0],
@@ -57,6 +58,7 @@ const Debug: NextPage = () => {
           </>
         )}
       </div>
+
       <div className="text-center mt-8 bg-secondary p-10">
         <h1 className="text-4xl my-0">Debug Contracts</h1>
         <p className="text-neutral">
@@ -66,6 +68,7 @@ const Debug: NextPage = () => {
             packages / nextjs / pages / debug.tsx
           </code>{" "}
         </p>
+        
       </div>
     </>
   );

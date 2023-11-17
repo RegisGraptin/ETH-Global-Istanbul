@@ -40,4 +40,6 @@ contract SubscriptionWallet is Ownable {
         emit MonthlyTransfer(block.timestamp / 30 days, monthly_amount, target_charity);
     }
 
+    function send() public payable {}
+
 }
