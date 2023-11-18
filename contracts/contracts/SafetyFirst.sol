@@ -142,6 +142,25 @@ contract SafetyFirst is FunctionsClient, ConfirmedOwner {
         emit DisasterRegistered(_disasterId, _occurrence, disasters[disasterId]);
     }
 
+    function registerDisasterOwner(
+        bool _occurrence,
+        string calldata _disasterId,
+        string calldata _category,
+        string calldata _location,
+        string calldata _evidence
+    ) public onlyOwner {
+
+        occurrences[_disasterId] = _occurrence;
+
+        disasters[_disasterId] = Disaster({
+            category: _category,
+            location: _location,
+            evidence: _evidence
+        });
+
+        emit DisasterRegistered(_disasterId, _occurrence, disasters[disasterId]);
+    }
+
     /// @param signal An arbitrary input from the user, usually the user's wallet address (check README for further details)
     /// @param root The root of the Merkle tree (returned by the JS widget).
     /// @param nullifierHash The nullifier hash for this proof, preventing double signaling (returned by the JS widget).

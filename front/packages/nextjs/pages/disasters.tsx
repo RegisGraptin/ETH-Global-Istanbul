@@ -20,7 +20,7 @@ const Disaster: NextPage = () => {
 
 
   const { config: claimConfig } = usePrepareContractWrite({
-    address: "0x91Da357C8dEF04Fbd57d506C18421F560B3D41Ba",
+    address: process.env.SAFETY_FIRST_CONTRACT,
     abi: [{
       inputs: [],
       name: 'InvalidNullifier',
@@ -82,12 +82,6 @@ const Disaster: NextPage = () => {
 
   const [data, setData] = React.useState<getDisastersQuery>()
 
-  // const handleVerify = (disasterId, open) => {
-  //   console.log("DIS:", disasterId);
-  //   setDisasterId("disaster-".concat(disasterId)); // Set the disasterId when a user interacts with an item
-  //   open(); // Open the World ID widget
-  // };
-
   const handleVerify = (disasterItem, open) => {
     const uniqueActionId = "disaster-" + disasterItem.disasterId; // Generate a unique action ID
     setDisasterId(uniqueActionId); // Update the state with the new action ID
@@ -124,7 +118,6 @@ const Disaster: NextPage = () => {
                     <a href="#">
                       <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{capitalizeFirstLetter(item.disaster_category)} - {item.disaster_location}</h5>
                     </a>
-                    {/* <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p> */}
 
                     <div className="flex mt-4 md:mt-6">
                       <a href={item.disaster_evidence} className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -144,7 +137,7 @@ const Disaster: NextPage = () => {
                           
                           <IDKitWidget
                           key={item.disasterId}
-                          app_id="app_ca49010ff2c9b0c665b5c9c7f1b4e303"
+                          app_id= {process.env.WC_APP_ID}
                           action={disasterId}
                           signal={address}
                           onSuccess={setProof}
