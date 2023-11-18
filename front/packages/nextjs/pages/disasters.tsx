@@ -136,8 +136,12 @@ const Disaster: NextPage = () => {
 
                       {address ? (
                         proof && selectedDisasterItem === item.disasterId ? (
-                          <button disabled={isLoading} onClick={claimFunction}>Submit TX</button>
+                          <button 
+                            disabled={isLoading} 
+                            className='ml-2 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800'
+                            onClick={claimFunction}>Submit TX</button>
                         ) : (
+                          
                           <IDKitWidget
                           key={item.disasterId}
                           app_id="app_ca49010ff2c9b0c665b5c9c7f1b4e303"
@@ -145,7 +149,14 @@ const Disaster: NextPage = () => {
                           signal={address}
                           onSuccess={setProof}
                         >
-                          {({ open }) => <button onClick={() => handleVerify(item, open)}>Verify with World ID {"disaster-".concat(item.disasterId)}</button>}
+                          {({ open }) => <button 
+                          className='ml-2 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800'
+                          onClick={
+                            () => handleVerify(item, open)
+                          }>
+                            Verify with World ID 
+                            {/* {"disaster-".concat(item.disasterId)} */}
+                          </button>}
                         </IDKitWidget>
                         )
                       ) : (
