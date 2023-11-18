@@ -2,6 +2,8 @@ import Link from "next/link";
 import type { NextPage } from "next";
 import { BugAntIcon } from "@heroicons/react/24/outline";
 import { MetaHeader } from "~~/components/MetaHeader";
+import { Feature } from "~~/components/home/Feature";
+import Disaster from "./disasters";
 
 const Home: NextPage = () => {
   return (
@@ -43,6 +45,11 @@ const Home: NextPage = () => {
             </div>
           </div>
         </div>
+
+        <Disaster />
+
+        <Feature />
+
       </div>
     </>
   );
