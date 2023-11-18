@@ -13,7 +13,7 @@ export const AddressStorageTab = ({ address }: { address: string }) => {
   useEffect(() => {
     const fetchStorage = async () => {
       try {
-        const storageData = [];
+        const storageData: string[] = [];
         let idx = 0;
 
         while (true) {

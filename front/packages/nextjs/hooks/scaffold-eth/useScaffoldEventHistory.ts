@@ -62,22 +62,22 @@ export const useScaffoldEventHistory = <
         });
         const newEvents = [];
         for (let i = logs.length - 1; i >= 0; i--) {
-          newEvents.push({
-            log: logs[i],
-            args: logs[i].args,
-            block:
-              blockData && logs[i].blockHash === null
-                ? null
-                : await publicClient.getBlock({ blockHash: logs[i].blockHash as Hash }),
-            transaction:
-              transactionData && logs[i].transactionHash !== null
-                ? await publicClient.getTransaction({ hash: logs[i].transactionHash as Hash })
-                : null,
-            receipt:
-              receiptData && logs[i].transactionHash !== null
-                ? await publicClient.getTransactionReceipt({ hash: logs[i].transactionHash as Hash })
-                : null,
-          });
+          // newEvents.push({
+          //   log: logs[i],
+          //   args: logs[i].args,
+          //   block:
+          //     blockData && logs[i].blockHash === null
+          //       ? null
+          //       : await publicClient.getBlock({ blockHash: logs[i].blockHash as Hash }),
+          //   transaction:
+          //     transactionData && logs[i].transactionHash !== null
+          //       ? await publicClient.getTransaction({ hash: logs[i].transactionHash as Hash })
+          //       : null,
+          //   receipt:
+          //     receiptData && logs[i].transactionHash !== null
+          //       ? await publicClient.getTransactionReceipt({ hash: logs[i].transactionHash as Hash })
+          //       : null,
+          // });
         }
         setEvents(newEvents);
         setError(undefined);

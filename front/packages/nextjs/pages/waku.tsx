@@ -7,7 +7,7 @@ import { waitForRemotePeer } from "@waku/sdk";
 import { createEncoder, createDecoder } from "@waku/sdk";
 import { AlertMessage } from "~~/components/waku/AlertMessage";
 import { useEffect, useMemo, useState } from "react";
-import { Reader } from "protobufjs";
+import { Message, Reader } from "protobufjs";
 
 import React from "react";
 import GoogleMapReact from 'google-map-react';
@@ -16,7 +16,7 @@ import GoogleMapReact from 'google-map-react';
 const Waku: NextPage = () => {
 
   const [node, setNode] = useState<LightNode>();
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<any>([]);
   const [map, setMap] = useState();
 
 
@@ -94,12 +94,11 @@ const Waku: NextPage = () => {
 
       setMessages((messages) => [...messages, messageObj]);
 
-
-      const myLatLng = { lat: Number(messageObj.latitude), lng: Number(messageObj.longitude) };      
+      const myLatLng = { lat: Number(messageObj["latitude"]), lng: Number(messageObj["longitude"]) };      
       new google.maps.Marker({
         position: myLatLng,
         map,
-        title: messageObj.event,
+        title: messageObj["event"],
       });
     };
 
@@ -144,7 +143,7 @@ const Waku: NextPage = () => {
 
           <div style={{ height: '100vh', width: '50%' }}>
             <GoogleMapReact
-              bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY }}
+              bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY || "" }}
               defaultCenter={defaultProps.center}
               defaultZoom={defaultProps.zoom}
               yesIWantToUseGoogleMapApiInternals

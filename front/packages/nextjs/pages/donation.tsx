@@ -22,7 +22,7 @@ const Donation: NextPage = () => {
       console.log(process.env.NEXT_PUBLIC_GATEFI_PARTNER_ID);
 
       embedInstanceSDK.current = new GateFiSDK({
-        merchantId: process.env.NEXT_PUBLIC_GATEFI_PARTNER_ID, // "9e34f479-b43a-4372-8bdf-90689e16cd5b",
+        merchantId: process.env.NEXT_PUBLIC_GATEFI_PARTNER_ID || "", // "9e34f479-b43a-4372-8bdf-90689e16cd5b",
         displayMode: GateFiDisplayModeEnum.Embedded,
         nodeSelector: "#embed-button",
         isSandbox: true,

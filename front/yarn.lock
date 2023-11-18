@@ -5165,6 +5165,7 @@ __metadata:
   resolution: "@se-2/nextjs@workspace:packages/nextjs"
   dependencies:
     "@ethersproject/providers": ^5.7.2
+    "@gatefi/js-sdk": ^0.14.0
     "@graphprotocol/client-cli": ^3.0.0
     "@heroicons/react": ^2.0.11
     "@rainbow-me/rainbowkit": 1.1.2

@@ -47,7 +47,7 @@ export const useTransactor = (_walletClient?: WalletClient): TransactionFunc => 
       return;
     }
 
-    let notificationId = null;
+    let notificationId; // = null;
     let transactionHash: Awaited<WriteContractResult>["hash"] | undefined = undefined;
     try {
       const network = await walletClient.getChainId();

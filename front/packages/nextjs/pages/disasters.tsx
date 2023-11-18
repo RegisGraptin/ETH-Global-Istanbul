@@ -137,8 +137,8 @@ const Disaster: NextPage = () => {
                           
                           <IDKitWidget
                           key={item.disasterId}
-                          app_id= {process.env.WC_APP_ID}
-                          action={disasterId}
+                          app_id= {process.env.WC_APP_ID || ""}
+                          action={disasterId || ""}
                           signal={address}
                           onSuccess={setProof}
                         >

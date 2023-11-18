@@ -23,9 +23,9 @@ export const useScaffoldContract = <
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
   const publicClient = usePublicClient();
 
-  let contract = undefined;
-  if (deployedContractData) {
-    contract = getContract<
+  // let contract = undefined;
+  // if (deployedContractData) {
+    let contract = getContract<
       Transport,
       Address,
       Contract<TContractName>["abi"],
@@ -34,12 +34,12 @@ export const useScaffoldContract = <
       PublicClient,
       TWalletClient
     >({
-      address: deployedContractData.address,
-      abi: deployedContractData.abi as Contract<TContractName>["abi"],
+      address: deployedContractData?.address || "",
+      abi: deployedContractData?.abi as Contract<TContractName>["abi"],
       walletClient: walletClient ? walletClient : undefined,
       publicClient,
     });
-  }
+  // }
 
   return {
     data: contract,
