@@ -12,8 +12,8 @@ Finally, SafetyFirst goes beyond financial aid; we've implemented an innovative 
 A smart contract centralized the list of disasters allowing anyone to see the current natural disaster that have occured around the world.
 
 To manage those natural disaster, we have two mechanism: 
-- A centtral authority can create a new natural disaster event, and prepare financial assistance for that.
-- We receive a Chainlink trigger that fetching information from an API that provide real-time natural disaster information. Thus, when a new one appear, it creates a new natural disaster inside our smart contract. (Implementation In Progress)
+- A central authority can create a new natural disaster event, and prepare financial assistance for that.
+- We receive a Chainlink trigger that fetching information from an API that provide real-time natural disaster information. Thus, when a new one appear, it creates a new natural disaster inside our smart contract.
 
 For our smart contract, we deployed it on mumbai. Here you can find information about it:
 
@@ -23,6 +23,9 @@ https://mumbai.polygonscan.com/address/0x25d6043b08892cC5f96A44f423Ac614379DBf27
 SafetyFirst test contract v.1 (verified)
 https://mumbai.polygonscan.com/address/0xd804562F11140d330456A68665BD6e0e19636e48
 
+
+For the trigger creation with chainlink, here an example of the expected interaction with the API and our smart contract:
+> https://mumbai.polygonscan.com/address/0xc8b457f6e20e4cd95bf1c5dcd1cacbdc33a246c3#events
 
 
 ## Indexing Natural Disaster - The Graph
