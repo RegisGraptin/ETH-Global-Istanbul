@@ -6,7 +6,7 @@ import { MetaHeader } from "~~/components/MetaHeader";
 
 import { getDisastersDocument, getDisastersQuery, execute } from '../.graphclient'
 
-
+const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/` : "/";
 
 const Disaster: NextPage = () => {
 
@@ -38,15 +38,16 @@ const Disaster: NextPage = () => {
             {data && data.disasterRegistereds.map((item, index) => {
               return (
                 <div key={index} className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-                  <BugAntIcon className="h-8 w-8 fill-secondary" />
                   <p>
 
-                      <p>
-                        {item.disaster_location}
-                        <br/>
-                        {item.disaster_category}
+                    <img src={`/images/image_${index + 1}.jpg`} />
 
-                      </p>
+                    <p>
+                      {item.disaster_location}
+                      <br />
+                      {item.disaster_category}
+
+                    </p>
                     <br />
 
                     <a href={item.disaster_evidence}>More info</a>
