@@ -10,6 +10,60 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
+export class ChainlinkCancelled extends ethereum.Event {
+  get params(): ChainlinkCancelled__Params {
+    return new ChainlinkCancelled__Params(this);
+  }
+}
+
+export class ChainlinkCancelled__Params {
+  _event: ChainlinkCancelled;
+
+  constructor(event: ChainlinkCancelled) {
+    this._event = event;
+  }
+
+  get id(): Bytes {
+    return this._event.parameters[0].value.toBytes();
+  }
+}
+
+export class ChainlinkFulfilled extends ethereum.Event {
+  get params(): ChainlinkFulfilled__Params {
+    return new ChainlinkFulfilled__Params(this);
+  }
+}
+
+export class ChainlinkFulfilled__Params {
+  _event: ChainlinkFulfilled;
+
+  constructor(event: ChainlinkFulfilled) {
+    this._event = event;
+  }
+
+  get id(): Bytes {
+    return this._event.parameters[0].value.toBytes();
+  }
+}
+
+export class ChainlinkRequested extends ethereum.Event {
+  get params(): ChainlinkRequested__Params {
+    return new ChainlinkRequested__Params(this);
+  }
+}
+
+export class ChainlinkRequested__Params {
+  _event: ChainlinkRequested;
+
+  constructor(event: ChainlinkRequested) {
+    this._event = event;
+  }
+
+  get id(): Bytes {
+    return this._event.parameters[0].value.toBytes();
+  }
+}
+
 export class Claimed extends ethereum.Event {
   get params(): Claimed__Params {
     return new Claimed__Params(this);
@@ -45,8 +99,8 @@ export class DisasterRegistered__Params {
     this._event = event;
   }
 
-  get disasterId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
+  get disasterId(): Bytes {
+    return this._event.parameters[0].value.toBytes();
   }
 
   get status(): boolean {
@@ -74,6 +128,44 @@ export class DisasterRegisteredDisasterStruct extends ethereum.Tuple {
   }
 }
 
+export class DisasterUpdated extends ethereum.Event {
+  get params(): DisasterUpdated__Params {
+    return new DisasterUpdated__Params(this);
+  }
+}
+
+export class DisasterUpdated__Params {
+  _event: DisasterUpdated;
+
+  constructor(event: DisasterUpdated) {
+    this._event = event;
+  }
+
+  get disasterId(): Bytes {
+    return this._event.parameters[0].value.toBytes();
+  }
+
+  get disaster(): DisasterUpdatedDisasterStruct {
+    return changetype<DisasterUpdatedDisasterStruct>(
+      this._event.parameters[1].value.toTuple()
+    );
+  }
+}
+
+export class DisasterUpdatedDisasterStruct extends ethereum.Tuple {
+  get category(): string {
+    return this[0].toString();
+  }
+
+  get location(): string {
+    return this[1].toString();
+  }
+
+  get evidence(): string {
+    return this[2].toString();
+  }
+}
+
 export class OccurrenceChanged extends ethereum.Event {
   get params(): OccurrenceChanged__Params {
     return new OccurrenceChanged__Params(this);
@@ -87,12 +179,34 @@ export class OccurrenceChanged__Params {
     this._event = event;
   }
 
-  get disasterId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
+  get disasterId(): Bytes {
+    return this._event.parameters[0].value.toBytes();
   }
 
   get occurrence(): boolean {
     return this._event.parameters[1].value.toBoolean();
+  }
+}
+
+export class OwnershipTransferRequested extends ethereum.Event {
+  get params(): OwnershipTransferRequested__Params {
+    return new OwnershipTransferRequested__Params(this);
+  }
+}
+
+export class OwnershipTransferRequested__Params {
+  _event: OwnershipTransferRequested;
+
+  constructor(event: OwnershipTransferRequested) {
+    this._event = event;
+  }
+
+  get from(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get to(): Address {
+    return this._event.parameters[1].value.toAddress();
   }
 }
 
@@ -109,12 +223,34 @@ export class OwnershipTransferred__Params {
     this._event = event;
   }
 
-  get previousOwner(): Address {
+  get from(): Address {
     return this._event.parameters[0].value.toAddress();
   }
 
-  get newOwner(): Address {
+  get to(): Address {
     return this._event.parameters[1].value.toAddress();
+  }
+}
+
+export class RequestFirstId extends ethereum.Event {
+  get params(): RequestFirstId__Params {
+    return new RequestFirstId__Params(this);
+  }
+}
+
+export class RequestFirstId__Params {
+  _event: RequestFirstId;
+
+  constructor(event: RequestFirstId) {
+    this._event = event;
+  }
+
+  get requestId(): Bytes {
+    return this._event.parameters[0].value.toBytes();
+  }
+
+  get id(): string {
+    return this._event.parameters[1].value.toString();
   }
 }
 
@@ -188,26 +324,11 @@ export class SafetyFirst extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  disasterId(): BigInt {
-    let result = super.call("disasterId", "disasterId():(uint256)", []);
-
-    return result[0].toBigInt();
-  }
-
-  try_disasterId(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall("disasterId", "disasterId():(uint256)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  disasters(param0: BigInt): SafetyFirst__disastersResult {
+  disasters(param0: string): SafetyFirst__disastersResult {
     let result = super.call(
       "disasters",
-      "disasters(uint256):(string,string,string)",
-      [ethereum.Value.fromUnsignedBigInt(param0)]
+      "disasters(string):(string,string,string)",
+      [ethereum.Value.fromString(param0)]
     );
 
     return new SafetyFirst__disastersResult(
@@ -218,12 +339,12 @@ export class SafetyFirst extends ethereum.SmartContract {
   }
 
   try_disasters(
-    param0: BigInt
+    param0: string
   ): ethereum.CallResult<SafetyFirst__disastersResult> {
     let result = super.tryCall(
       "disasters",
-      "disasters(uint256):(string,string,string)",
-      [ethereum.Value.fromUnsignedBigInt(param0)]
+      "disasters(string):(string,string,string)",
+      [ethereum.Value.fromString(param0)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -238,17 +359,17 @@ export class SafetyFirst extends ethereum.SmartContract {
     );
   }
 
-  occurrences(param0: BigInt): boolean {
-    let result = super.call("occurrences", "occurrences(uint256):(bool)", [
-      ethereum.Value.fromUnsignedBigInt(param0)
+  occurrences(param0: string): boolean {
+    let result = super.call("occurrences", "occurrences(string):(bool)", [
+      ethereum.Value.fromString(param0)
     ]);
 
     return result[0].toBoolean();
   }
 
-  try_occurrences(param0: BigInt): ethereum.CallResult<boolean> {
-    let result = super.tryCall("occurrences", "occurrences(uint256):(bool)", [
-      ethereum.Value.fromUnsignedBigInt(param0)
+  try_occurrences(param0: string): ethereum.CallResult<boolean> {
+    let result = super.tryCall("occurrences", "occurrences(string):(bool)", [
+      ethereum.Value.fromString(param0)
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -290,12 +411,16 @@ export class ConstructorCall__Inputs {
     this._call = call;
   }
 
-  get initialOwner(): Address {
+  get _worldId(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
+  get _appId(): string {
+    return this._call.inputValues[1].value.toString();
+  }
+
   get _token(): Address {
-    return this._call.inputValues[1].value.toAddress();
+    return this._call.inputValues[2].value.toAddress();
   }
 }
 
@@ -333,6 +458,32 @@ export class DefaultCall__Outputs {
   }
 }
 
+export class AcceptOwnershipCall extends ethereum.Call {
+  get inputs(): AcceptOwnershipCall__Inputs {
+    return new AcceptOwnershipCall__Inputs(this);
+  }
+
+  get outputs(): AcceptOwnershipCall__Outputs {
+    return new AcceptOwnershipCall__Outputs(this);
+  }
+}
+
+export class AcceptOwnershipCall__Inputs {
+  _call: AcceptOwnershipCall;
+
+  constructor(call: AcceptOwnershipCall) {
+    this._call = call;
+  }
+}
+
+export class AcceptOwnershipCall__Outputs {
+  _call: AcceptOwnershipCall;
+
+  constructor(call: AcceptOwnershipCall) {
+    this._call = call;
+  }
+}
+
 export class ChangeOccurrenceCall extends ethereum.Call {
   get inputs(): ChangeOccurrenceCall__Inputs {
     return new ChangeOccurrenceCall__Inputs(this);
@@ -350,8 +501,8 @@ export class ChangeOccurrenceCall__Inputs {
     this._call = call;
   }
 
-  get _disasterId(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
+  get _disasterId(): string {
+    return this._call.inputValues[0].value.toString();
   }
 
   get _occurrence(): boolean {
@@ -397,50 +548,54 @@ export class ChangeTokenCall__Outputs {
   }
 }
 
-export class ClaimCall extends ethereum.Call {
-  get inputs(): ClaimCall__Inputs {
-    return new ClaimCall__Inputs(this);
+export class FulfillCall extends ethereum.Call {
+  get inputs(): FulfillCall__Inputs {
+    return new FulfillCall__Inputs(this);
   }
 
-  get outputs(): ClaimCall__Outputs {
-    return new ClaimCall__Outputs(this);
+  get outputs(): FulfillCall__Outputs {
+    return new FulfillCall__Outputs(this);
   }
 }
 
-export class ClaimCall__Inputs {
-  _call: ClaimCall;
+export class FulfillCall__Inputs {
+  _call: FulfillCall;
 
-  constructor(call: ClaimCall) {
+  constructor(call: FulfillCall) {
     this._call = call;
   }
 
-  get _victim(): Address {
-    return this._call.inputValues[0].value.toAddress();
+  get requestId(): Bytes {
+    return this._call.inputValues[0].value.toBytes();
+  }
+
+  get id(): string {
+    return this._call.inputValues[1].value.toString();
   }
 }
 
-export class ClaimCall__Outputs {
-  _call: ClaimCall;
+export class FulfillCall__Outputs {
+  _call: FulfillCall;
 
-  constructor(call: ClaimCall) {
+  constructor(call: FulfillCall) {
     this._call = call;
   }
 }
 
-export class RegisterDisasterCall extends ethereum.Call {
-  get inputs(): RegisterDisasterCall__Inputs {
-    return new RegisterDisasterCall__Inputs(this);
+export class RegisterDisasterOwnerCall extends ethereum.Call {
+  get inputs(): RegisterDisasterOwnerCall__Inputs {
+    return new RegisterDisasterOwnerCall__Inputs(this);
   }
 
-  get outputs(): RegisterDisasterCall__Outputs {
-    return new RegisterDisasterCall__Outputs(this);
+  get outputs(): RegisterDisasterOwnerCall__Outputs {
+    return new RegisterDisasterOwnerCall__Outputs(this);
   }
 }
 
-export class RegisterDisasterCall__Inputs {
-  _call: RegisterDisasterCall;
+export class RegisterDisasterOwnerCall__Inputs {
+  _call: RegisterDisasterOwnerCall;
 
-  constructor(call: RegisterDisasterCall) {
+  constructor(call: RegisterDisasterOwnerCall) {
     this._call = call;
   }
 
@@ -448,49 +603,57 @@ export class RegisterDisasterCall__Inputs {
     return this._call.inputValues[0].value.toBoolean();
   }
 
-  get _category(): string {
+  get _disasterId(): string {
     return this._call.inputValues[1].value.toString();
   }
 
-  get _location(): string {
+  get _category(): string {
     return this._call.inputValues[2].value.toString();
   }
 
-  get _evidence(): string {
+  get _location(): string {
     return this._call.inputValues[3].value.toString();
   }
+
+  get _evidence(): string {
+    return this._call.inputValues[4].value.toString();
+  }
 }
 
-export class RegisterDisasterCall__Outputs {
-  _call: RegisterDisasterCall;
+export class RegisterDisasterOwnerCall__Outputs {
+  _call: RegisterDisasterOwnerCall;
 
-  constructor(call: RegisterDisasterCall) {
+  constructor(call: RegisterDisasterOwnerCall) {
     this._call = call;
   }
 }
 
-export class RenounceOwnershipCall extends ethereum.Call {
-  get inputs(): RenounceOwnershipCall__Inputs {
-    return new RenounceOwnershipCall__Inputs(this);
+export class RequestDisasterCall extends ethereum.Call {
+  get inputs(): RequestDisasterCall__Inputs {
+    return new RequestDisasterCall__Inputs(this);
   }
 
-  get outputs(): RenounceOwnershipCall__Outputs {
-    return new RenounceOwnershipCall__Outputs(this);
+  get outputs(): RequestDisasterCall__Outputs {
+    return new RequestDisasterCall__Outputs(this);
   }
 }
 
-export class RenounceOwnershipCall__Inputs {
-  _call: RenounceOwnershipCall;
+export class RequestDisasterCall__Inputs {
+  _call: RequestDisasterCall;
 
-  constructor(call: RenounceOwnershipCall) {
+  constructor(call: RequestDisasterCall) {
     this._call = call;
   }
+
+  get url(): string {
+    return this._call.inputValues[0].value.toString();
+  }
 }
 
-export class RenounceOwnershipCall__Outputs {
-  _call: RenounceOwnershipCall;
+export class RequestDisasterCall__Outputs {
+  _call: RequestDisasterCall;
 
-  constructor(call: RenounceOwnershipCall) {
+  constructor(call: RequestDisasterCall) {
     this._call = call;
   }
 }
@@ -512,7 +675,7 @@ export class TransferOwnershipCall__Inputs {
     this._call = call;
   }
 
-  get newOwner(): Address {
+  get to(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 }
@@ -521,6 +684,120 @@ export class TransferOwnershipCall__Outputs {
   _call: TransferOwnershipCall;
 
   constructor(call: TransferOwnershipCall) {
+    this._call = call;
+  }
+}
+
+export class UpdateDisasterCall extends ethereum.Call {
+  get inputs(): UpdateDisasterCall__Inputs {
+    return new UpdateDisasterCall__Inputs(this);
+  }
+
+  get outputs(): UpdateDisasterCall__Outputs {
+    return new UpdateDisasterCall__Outputs(this);
+  }
+}
+
+export class UpdateDisasterCall__Inputs {
+  _call: UpdateDisasterCall;
+
+  constructor(call: UpdateDisasterCall) {
+    this._call = call;
+  }
+
+  get _disasterId(): string {
+    return this._call.inputValues[0].value.toString();
+  }
+
+  get _category(): string {
+    return this._call.inputValues[1].value.toString();
+  }
+
+  get _location(): string {
+    return this._call.inputValues[2].value.toString();
+  }
+
+  get _evidence(): string {
+    return this._call.inputValues[3].value.toString();
+  }
+}
+
+export class UpdateDisasterCall__Outputs {
+  _call: UpdateDisasterCall;
+
+  constructor(call: UpdateDisasterCall) {
+    this._call = call;
+  }
+}
+
+export class VerifyAndExecuteCall extends ethereum.Call {
+  get inputs(): VerifyAndExecuteCall__Inputs {
+    return new VerifyAndExecuteCall__Inputs(this);
+  }
+
+  get outputs(): VerifyAndExecuteCall__Outputs {
+    return new VerifyAndExecuteCall__Outputs(this);
+  }
+}
+
+export class VerifyAndExecuteCall__Inputs {
+  _call: VerifyAndExecuteCall;
+
+  constructor(call: VerifyAndExecuteCall) {
+    this._call = call;
+  }
+
+  get signal(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get root(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+
+  get nullifierHash(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
+
+  get proof(): Array<BigInt> {
+    return this._call.inputValues[3].value.toBigIntArray();
+  }
+
+  get _actionId(): string {
+    return this._call.inputValues[4].value.toString();
+  }
+}
+
+export class VerifyAndExecuteCall__Outputs {
+  _call: VerifyAndExecuteCall;
+
+  constructor(call: VerifyAndExecuteCall) {
+    this._call = call;
+  }
+}
+
+export class WithdrawLinkCall extends ethereum.Call {
+  get inputs(): WithdrawLinkCall__Inputs {
+    return new WithdrawLinkCall__Inputs(this);
+  }
+
+  get outputs(): WithdrawLinkCall__Outputs {
+    return new WithdrawLinkCall__Outputs(this);
+  }
+}
+
+export class WithdrawLinkCall__Inputs {
+  _call: WithdrawLinkCall;
+
+  constructor(call: WithdrawLinkCall) {
+    this._call = call;
+  }
+}
+
+export class WithdrawLinkCall__Outputs {
+  _call: WithdrawLinkCall;
+
+  constructor(call: WithdrawLinkCall) {
     this._call = call;
   }
 }
