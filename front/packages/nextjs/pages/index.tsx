@@ -23,7 +23,7 @@ const Home: NextPage = () => {
                   Safety<br />
                   <span className="shift-name">First</span>
                 </h1>
-                <p className="pt-5 text-4xl font-bold dark:text-white">Help people victims from natural disasters</p>
+                <p className="pt-5 text-4xl font-bold dark:text-white">Restoring Hope, Empowering Lives, Ensuring Resilience</p>
 
                 <div
                   className="inline-block mt-5 white-button focus:!bg-secondary active:!text-neutral max-w-sm shadow-lg rounded-xl">

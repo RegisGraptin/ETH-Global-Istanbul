@@ -32,7 +32,11 @@ export const Feature = () => {
             <hr className="w-48 h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700"></hr>
 
             <blockquote className="text-xl italic font-semibold text-center text-gray-900 dark:text-white">
-              <p>"Flowbite is just awesome. It contains tons of predesigned components and pages starting from login screen to complex dashboard. Perfect choice for your next SaaS application."</p>
+              <p>
+              Customize your philanthropy by choosing a charity aligned with your values. Ensure steady monthly contributions 
+              for reliable support, and enjoy the flexibility to adapt your giving strategy as life evolves by easily 
+              canceling your subscription. Make a consistent and meaningful impact with ease.
+              </p>
             </blockquote>
           </article>
 
