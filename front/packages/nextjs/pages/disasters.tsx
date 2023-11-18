@@ -83,7 +83,7 @@ const Disaster: NextPage = () => {
   const [data, setData] = React.useState<getDisastersQuery>()
 
   const handleVerify = (disasterItem, open) => {
-    const uniqueActionId = "disaster-" + disasterItem.disasterId; // Generate a unique action ID
+    const uniqueActionId = disasterItem.disasterId; // Generate a unique action ID
     setDisasterId(uniqueActionId); // Update the state with the new action ID
     setSelectedDisasterItem(disasterItem.disasterId);
     open(); // Open the World ID widget
@@ -147,8 +147,7 @@ const Disaster: NextPage = () => {
                           onClick={
                             () => handleVerify(item, open)
                           }>
-                            Verify with World ID 
-                            {/* {"disaster-".concat(item.disasterId)} */}
+                            Verify with World ID
                           </button>}
                         </IDKitWidget>
                         )
