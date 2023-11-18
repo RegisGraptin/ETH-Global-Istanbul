@@ -12,9 +12,7 @@ export function handleDisasterRegistered(event: DisasterRegisteredEvent): void {
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
 
-  let id: Bytes = event.params.disasterId
-
-  entity.disasterId = id.toHexString()
+  entity.disasterId = event.params.disasterId.toString()
   entity.status = event.params.status
   entity.disaster_category = event.params.disaster.category
   entity.disaster_location = event.params.disaster.location

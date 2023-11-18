@@ -99,8 +99,8 @@ export class DisasterRegistered__Params {
     this._event = event;
   }
 
-  get disasterId(): Bytes {
-    return this._event.parameters[0].value.toBytes();
+  get disasterId(): string {
+    return this._event.parameters[0].value.toString();
   }
 
   get status(): boolean {
@@ -141,8 +141,8 @@ export class DisasterUpdated__Params {
     this._event = event;
   }
 
-  get disasterId(): Bytes {
-    return this._event.parameters[0].value.toBytes();
+  get disasterId(): string {
+    return this._event.parameters[0].value.toString();
   }
 
   get disaster(): DisasterUpdatedDisasterStruct {
@@ -179,8 +179,8 @@ export class OccurrenceChanged__Params {
     this._event = event;
   }
 
-  get disasterId(): Bytes {
-    return this._event.parameters[0].value.toBytes();
+  get disasterId(): string {
+    return this._event.parameters[0].value.toString();
   }
 
   get occurrence(): boolean {

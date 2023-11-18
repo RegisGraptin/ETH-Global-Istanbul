@@ -46,13 +46,11 @@ contract SafetyFirst is ChainlinkClient, ConfirmedOwner {
     bytes32 private jobId;
     uint256 private fee;
 
-    event RequestFirstId(bytes32 indexed requestId, string id);
-
-    event DisasterRegistered(string indexed disasterId, bool status, Disaster disaster);
-    event DisasterUpdated(string indexed disasterId, Disaster disaster);
-
+    event RequestFirstId(bytes32 requestId, string id);
+    event DisasterRegistered(string disasterId, bool status, Disaster disaster);
+    event DisasterUpdated(string disasterId, Disaster disaster);
     event Claimed(address victim, uint amount);
-    event OccurrenceChanged(string indexed disasterId, bool occurrence);
+    event OccurrenceChanged(string disasterId, bool occurrence);
     event TokenChanged(address newToken);
 
     /**
