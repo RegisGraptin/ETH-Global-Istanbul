@@ -1,0 +1,9 @@
+# .graphclientrc.yml
+sources:
+  - name: safetyfirst
+    handler:
+      graphql:
+        endpoint: https://api.studio.thegraph.com/query/54169/safetyfirst/v.0.0.1
+  
+documents:
+  - ./utils/graphql/disaster.graphql

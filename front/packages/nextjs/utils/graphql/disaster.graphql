@@ -1,0 +1,8 @@
+query getDisasters {
+  disasterRegistereds(orderBy: disasterId, orderDirection: desc) {
+    disasterId
+    disaster_category
+    disaster_location
+    disaster_evidence
+  }
+}
