@@ -1,0 +1,36 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: SafetyFirst
+    network: mumbai
+    source:
+      address: "0xd804562F11140d330456A68665BD6e0e19636e48"
+      abi: SafetyFirst
+      startBlock: 42528623
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Claimed
+        - DisasterRegistered
+        - OccurrenceChanged
+        - OwnershipTransferred
+        - TokenChanged
+      abis:
+        - name: SafetyFirst
+          file: ./abis/SafetyFirst.json
+      eventHandlers:
+        - event: Claimed(address,uint256)
+          handler: handleClaimed
+        - event: DisasterRegistered(uint256,bool,(string,string,string))
+          handler: handleDisasterRegistered
+        - event: OccurrenceChanged(uint256,bool)
+          handler: handleOccurrenceChanged
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: TokenChanged(address)
+          handler: handleTokenChanged
+      file: ./src/safety-first.ts
