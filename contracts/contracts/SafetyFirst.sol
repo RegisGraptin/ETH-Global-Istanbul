@@ -3,16 +3,20 @@ pragma solidity ^0.8.22;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import {FunctionsClient} from "@chainlink/contracts/src/v0.8/functions/dev/v1_0_0/FunctionsClient.sol";
-import {ConfirmedOwner} from "@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol";
-import {FunctionsRequest} from "@chainlink/contracts/src/v0.8/functions/dev/v1_0_0/libraries/FunctionsRequest.sol";
+import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
+import "@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol";
 import {ByteHasher} from "./helpers/ByteHasher.sol";
 import {IWorldID} from "./interfaces/IWorldID.sol";
 
-contract SafetyFirst is FunctionsClient, ConfirmedOwner {
+/**
+ * @title SafetyFirst Contract
+ * @notice This contract implements disaster tracking and compensation handling using Chainlink and World ID.
+ * @dev The contract uses Chainlink for external data fetching and World ID for unique identity verification.
+ */
+contract SafetyFirst is ChainlinkClient, ConfirmedOwner {
     using SafeERC20 for IERC20;
     using ByteHasher for bytes;
-    using FunctionsRequest for FunctionsRequest.Request;
+    using Chainlink for Chainlink.Request;
 
     uint256 public amount = 1 ether; // compensations
     IERC20 private token;
@@ -28,9 +32,9 @@ contract SafetyFirst is FunctionsClient, ConfirmedOwner {
     mapping(uint256 => bool) internal nullifierHashes;
 
     struct Disaster {
-        string category;
-        string location;
-        string evidence;
+        string category; // flood, earthquake, etc
+        string location; // landmark, city, etc
+        string evidence; // url to evidence
     }
 
     // id => status
@@ -39,98 +43,100 @@ contract SafetyFirst is FunctionsClient, ConfirmedOwner {
     // id => disaster
     mapping(string => Disaster) public disasters;
 
-    bytes32 public s_lastRequestId;
-    bytes public s_lastResponse;
-    bytes public s_lastError;
+    bytes32 private jobId;
+    uint256 private fee;
 
-    address router = 0x6E2dc0F9DB014aE19888F539E59285D2Ea04244C;
+    event RequestFirstId(bytes32 indexed requestId, string id);
 
-    string source =
-        "const apiResponse = await Functions.makeHttpRequest({"
-         "url: `https://api.reliefweb.int/v1/disasters?appname=rwint-user-0&profile=list&preset=latest&slim=1`"
-        "});"
-        "if (apiResponse.error) {"
-        "throw Error('Request failed');"
-        "}"
-        "const { data } = apiResponse;"
-        // new list
-        "return Functions.encodeBuffer(data);";
+    event DisasterRegistered(string indexed disasterId, bool status, Disaster disaster);
+    event DisasterUpdated(string indexed disasterId, Disaster disaster);
 
-    uint32 gasLimit = 300000;
-
-    bytes32 donID =
-        0x66756e2d706f6c79676f6e2d6d756d6261692d31000000000000000000000000;
-
-    event DisasterRegistered(
-        string disasterId,
-        bool status,
-        Disaster disaster
-    );
     event Claimed(address victim, uint amount);
-    event OccurrenceChanged(string calldata disasterId, bool occurrence);
+    event OccurrenceChanged(string indexed disasterId, bool occurrence);
     event TokenChanged(address newToken);
-    event Response(bytes32 indexed requestId, string jsonData, bytes response, bytes err);
 
-    /// @param _worldId The WorldID instance that will verify the proofs
-    /// @param _appId The World ID app ID
+    /**
+     * @notice Constructor for SafetyFirst contract.
+     * @param _worldId The WorldID instance that will verify the proofs.
+     * @param _appId The World ID app ID.
+     * @param _token The ERC20 token address used for compensations.
+     */
     constructor(
         IWorldID _worldId,
         string memory _appId,
-        address initialOwner,
         address _token
-    ) FunctionsClient(router) ConfirmedOwner(msg.sender) {
+    ) ConfirmedOwner(msg.sender) {
         worldId = _worldId;
         appId = _appId;
         token = IERC20(_token);
+        setChainlinkToken(0x326C977E6efc84E512bB9C30f76E30c160eD06FB);
+        setChainlinkOracle(0x40193c8518BB267228Fc409a613bDbD8eC5a97b3);
+        jobId = "7d80a6386ef543a3abb52817f6707e3b";
+        fee = (1 * LINK_DIVISIBILITY) / 10;
     }
 
-     function sendRequest(
-        uint64 subscriptionId,
-        string[] calldata args
-    ) external onlyOwner returns (bytes32 requestId) {
-        FunctionsRequest.Request memory req;
-        req.initializeRequestForInlineJavaScript(source); // Initialize the request with JS code
-        if (args.length > 0) req.setArgs(args); // Set the arguments for the request
-
-        // Send the request and store the request ID
-        s_lastRequestId = _sendRequest(
-            req.encodeCBOR(),
-            subscriptionId,
-            gasLimit,
-            donID
+    /**
+     * @notice Sends a request to Chainlink to fetch data for a potential disaster event.
+     * @dev Only callable by the contract owner.
+     * @param url The URL to fetch data from.
+     */
+    function requestDisaster(string calldata url) external onlyOwner {
+        Chainlink.Request memory req = buildChainlinkRequest(
+            jobId,
+            address(this),
+            this.fulfill.selector
         );
 
-        return s_lastRequestId;
+        req.add("get", url);
+
+        req.add("path", "data,0,id");
+        // Sends the request
+        sendChainlinkRequest(req, fee);
     }
 
-    function fulfillRequest(
+    /**
+     * @notice Callback function for Chainlink to fulfill data requests.
+     * @dev This function can only be called by Chainlink in response to `requestDisaster`.
+     * @param requestId The ID of the Chainlink request being fulfilled.
+     * @param id The disaster ID obtained from the Chainlink response.
+     */
+    function fulfill(
         bytes32 requestId,
-        bytes memory response,
-        bytes memory err
-    ) internal override {
-        if (s_lastRequestId != requestId) {
-            revert UnexpectedRequestID(requestId); // Check if request IDs match
-        }
-        // Update the contract's state variables with the response and any errors
-        s_lastResponse = response;
-        // param
-        jsonData = string(response);
-        s_lastError = err;
-
-        registerDisaster(jsonData.occurrence, disasterId, jsonData.category, jsonData.location, jsonData.evidence);
-
-        // Emit an event to log the response
-        emit Response(requestId, jsonData, s_lastResponse, s_lastError);
+        string memory id
+    ) public recordChainlinkFulfillment(requestId) {
+       registerDisaster(true, id, "tba", "tba", "tba");
+       emit RequestFirstId(requestId, id);
     }
 
+    /**
+     * @notice Allows the owner to withdraw LINK tokens from the contract.
+     * @dev Only callable by the contract owner.
+     */
+    function withdrawLink() public onlyOwner {
+        LinkTokenInterface link = LinkTokenInterface(chainlinkTokenAddress());
+        require(
+            link.transfer(msg.sender, link.balanceOf(address(this))),
+            "Unable to transfer"
+        );
+    }
+
+    /**
+     * @notice Registers a disaster event internally in the contract.
+     * @dev Internal function, can be called from other functions within the contract.
+     * @param _occurrence Indicates whether the disaster is currently occurring.
+     * @param _disasterId Unique identifier for the disaster.
+     * @param _category Type of the disaster (e.g., earthquake, flood).
+     * @param _location Location of the disaster.
+     * @param _evidence URL to evidence supporting the disaster occurrence.
+     */
     function registerDisaster(
         bool _occurrence,
-        string calldata _disasterId,
-        string calldata _category,
-        string calldata _location,
-        string calldata _evidence
+        string memory _disasterId,
+        string memory _category,
+        string memory _location,
+        string memory _evidence
     ) internal {
-
+        require(bytes(disasters[_disasterId].category).length == 0, "Disaster already registered");
         occurrences[_disasterId] = _occurrence;
 
         disasters[_disasterId] = Disaster({
@@ -139,9 +145,22 @@ contract SafetyFirst is FunctionsClient, ConfirmedOwner {
             evidence: _evidence
         });
 
-        emit DisasterRegistered(_disasterId, _occurrence, disasters[disasterId]);
+        emit DisasterRegistered(
+            _disasterId,
+            _occurrence,
+            disasters[_disasterId]
+        );
     }
 
+    /**
+     * @notice Allows the owner to register a disaster event.
+     * @dev Only callable by the contract owner. Registers a new disaster event.
+     * @param _occurrence Indicates whether the disaster is currently occurring.
+     * @param _disasterId Unique identifier for the disaster.
+     * @param _category Type of the disaster (e.g., earthquake, flood).
+     * @param _location Location of the disaster.
+     * @param _evidence URL to evidence supporting the disaster occurrence.
+     */
     function registerDisasterOwner(
         bool _occurrence,
         string calldata _disasterId,
@@ -149,8 +168,9 @@ contract SafetyFirst is FunctionsClient, ConfirmedOwner {
         string calldata _location,
         string calldata _evidence
     ) public onlyOwner {
-
         occurrences[_disasterId] = _occurrence;
+
+        require(bytes(disasters[_disasterId].category).length == 0, "Disaster already registered");
 
         disasters[_disasterId] = Disaster({
             category: _category,
@@ -158,15 +178,51 @@ contract SafetyFirst is FunctionsClient, ConfirmedOwner {
             evidence: _evidence
         });
 
-        emit DisasterRegistered(_disasterId, _occurrence, disasters[disasterId]);
+        emit DisasterRegistered(
+            _disasterId,
+            _occurrence,
+            disasters[_disasterId]
+        );
     }
 
-    /// @param signal An arbitrary input from the user, usually the user's wallet address (check README for further details)
-    /// @param root The root of the Merkle tree (returned by the JS widget).
-    /// @param nullifierHash The nullifier hash for this proof, preventing double signaling (returned by the JS widget).
-    /// @param proof The zero-knowledge proof that demonstrates the claimer is registered with World ID (returned by the JS widget).
-    /// @param _actionId The action ID that was used to generate the external nullifier hash
-    /// @dev Feel free to rename this method however you want! We've used `claim`, `verify` or `execute` in the past.
+    /**
+     * @notice Updates the details of an already registered disaster.
+     * @dev Only callable by the contract owner. Updates an existing disaster event.
+     * @param _disasterId Unique identifier for the disaster.
+     * @param _category Type of the disaster (e.g., earthquake, flood).
+     * @param _location Location of the disaster.
+     * @param _evidence URL to evidence supporting the disaster occurrence.
+     */
+    function updateDisaster(
+        string calldata _disasterId,
+        string calldata _category,
+        string calldata _location,
+        string calldata _evidence
+    ) public onlyOwner {
+        require(bytes(disasters[_disasterId].category).length > 0, "Disaster not registered");
+
+        disasters[_disasterId] = Disaster({
+            category: _category,
+            location: _location,
+            evidence: _evidence
+        });
+
+        emit DisasterUpdated(
+            _disasterId,
+            disasters[_disasterId]
+        );
+
+    }
+
+    /**
+     * @notice Verifies a user's claim using World ID and executes the claim if valid.
+     * @dev This function verifies proof of uniqueness and handles token transfers.
+     * @param signal An arbitrary input from the user, usually the user's wallet address.
+     * @param root The root of the Merkle tree used in the proof.
+     * @param nullifierHash The nullifier hash for this proof, preventing double signaling.
+     * @param proof The zero-knowledge proof of identity.
+     * @param _actionId The action ID related to the disaster event.
+     */
     function verifyAndExecute(
         address signal,
         uint256 root,
@@ -176,6 +232,7 @@ contract SafetyFirst is FunctionsClient, ConfirmedOwner {
     ) public {
         // First, we make sure this person hasn't done this before
         if (nullifierHashes[nullifierHash]) revert InvalidNullifier();
+        require(bytes(disasters[_actionId].category).length > 0, "Disaster not registered");
 
         uint256 externalNullifier = abi
             .encodePacked(abi.encodePacked(appId).hashToField(), _actionId)
@@ -199,8 +256,14 @@ contract SafetyFirst is FunctionsClient, ConfirmedOwner {
         emit Claimed(signal, amount);
     }
 
+    /**
+     * @notice Changes the occurrence status of a registered disaster.
+     * @dev Only callable by the contract owner. Updates the occurrence status of a disaster.
+     * @param _disasterId Unique identifier for the disaster.
+     * @param _occurrence The new occurrence status of the disaster.
+     */
     function changeOccurrence(
-        uint256 _disasterId,
+        string calldata _disasterId,
         bool _occurrence
     ) public onlyOwner {
         occurrences[_disasterId] = _occurrence;
@@ -208,6 +271,11 @@ contract SafetyFirst is FunctionsClient, ConfirmedOwner {
         emit OccurrenceChanged(_disasterId, _occurrence);
     }
 
+    /**
+     * @notice Changes the ERC20 token used for compensations.
+     * @dev Only callable by the contract owner. Changes the token address.
+     * @param _token The new ERC20 token address.
+     */
     function changeToken(address _token) public onlyOwner {
         token = IERC20(_token);
 
