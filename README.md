@@ -1,4 +1,10 @@
-# ETH-Global-Istanbul
+# SafetyFirst - ETH-Global-Istanbul
+
+SafetyFirst is a groundbreaking decentralized application (Dapp) designed to address the urgent needs arising from natural disasters such as earthquakes and tsunamis. Our platform is committed to providing swift financial assistance to victims in times of crisis, aiming to make a meaningful impact on their road to recovery.
+
+We introduced a donation process by introducing a user-friendly monthly subscription system on web3 platform. Users have the flexibility to set their monthly contribution amounts, ensuring a hassle-free and consistent approach to supporting disaster relief efforts. Subscription cancellation is made easy, empowering users with control over their contributions.
+
+Finally, SafetyFirst goes beyond financial aid; we've implemented an innovative alerting system for real-time communication during disasters. Victims can use the platform to notify the community about their need for assistance. Individuals willing to help can also use the system to offer their support to those affected, fostering a sense of community-driven aid.
 
 
 ## SafetyFirst Smart Contract
