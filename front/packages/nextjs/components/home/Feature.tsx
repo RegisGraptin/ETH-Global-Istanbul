@@ -106,7 +106,7 @@ export const Feature = () => {
       </article>
 
       <article>
-        <img src="/images/donation_grad.png" className="mx-auto object-cover rounded-lg shadow-xl dark:shadow-gray-800 h-auto max-w-xl" />
+        <img src="/images/volonteer_grad.png" className="mx-auto object-cover rounded-lg shadow-xl dark:shadow-gray-800 h-auto max-w-xl" />
       </article>
     </article>
   </section>

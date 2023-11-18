@@ -53,17 +53,19 @@ const Donation: NextPage = () => {
     <>
       <MetaHeader />
       <div className="flex items-center flex-col flex-grow pt-10">
-        <div className="px-5">
+        <div className="container px-5">
           <h1 className="text-center mb-8">
-            <span className="block text-4xl font-bold">Safety First</span>
+            <span className="block text-4xl font-bold">Empower Your Impact with Personalized Giving</span>
           </h1>
-          <p className="text-center text-lg">Provide funds for those in need.</p>
           <p className="text-center text-lg">
-            Help people by providing funds to them when an natural disaster has occurred.
+            Choose your donation amount and direct it to the cause that matters most to you. 
+            Our donation page puts the power in your hands, allowing you to support the foundation 
+            of your choice with a contribution that reflects your commitment to positive change. 
+            Make a difference on your terms – it starts with your choice.
           </p>
         </div>
 
-        <div>
+        <div className="pt-10">
           <div
             style={{
               position: "relative",
@@ -73,26 +75,6 @@ const Donation: NextPage = () => {
             }}
           >
             <div id="embed-button"></div>
-            {(
-              <button
-                style={{
-                  position: "absolute",
-                  right: "113px",
-                  transform: "none",
-                  top: "10px",
-                  background: "rgba(0, 0, 0, 0.7)",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "5px",
-                  padding: "5px 15px",
-                  cursor: "pointer",
-                  zIndex: 2000, // ensure it's above the embedded widget
-                  boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
-                }}
-              >
-                Close
-              </button>
-            )}
           </div>
         </div>
       </div>

@@ -1,9 +1,12 @@
 import Link from "next/link";
 import type { NextPage } from "next";
-import { BugAntIcon } from "@heroicons/react/24/outline";
 import { MetaHeader } from "~~/components/MetaHeader";
 import { Feature } from "~~/components/home/Feature";
 import Disaster from "./disasters";
+
+import { BiDonateHeart } from "react-icons/bi";
+import { HiOutlineBellAlert } from "react-icons/hi2";
+import { MdOutlineCalendarToday } from "react-icons/md";
 
 const Home: NextPage = () => {
   return (
@@ -51,40 +54,33 @@ const Home: NextPage = () => {
         </h1>
 
           <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">
+            
             <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <BugAntIcon className="h-8 w-8 fill-secondary" />
+              <MdOutlineCalendarToday className="h-8 w-8 fill-secondary dark:text-white" />
               <p>
-                Send a donation
-                <br />
                 <Link href="/donation" passHref className="link">
-                  Donate
+                  Send a donation
                 </Link>
               </p>
             </div>
 
             <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <BugAntIcon className="h-8 w-8 fill-secondary" />
+              <BiDonateHeart className="h-8 w-8 fill-secondary" />
               <p>
-                Monthly Subscription
-                <br />
                 <Link href="/monthly-subscription" passHref className="link">
-                  Create Subscription
+                  Monthly Subscription
                 </Link>
               </p>
             </div>
-
 
             <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <BugAntIcon className="h-8 w-8 fill-secondary" />
+              <HiOutlineBellAlert className="h-8 w-8 fill-secondary" />
               <p>
-                Real-Time Alerting System
-                <br />
                 <Link href="/waku" passHref className="link">
-                  Alert
+                  Real-Time Alerting System
                 </Link>
               </p>
             </div>
-
 
           </div>
         </div>
