@@ -110,7 +110,7 @@ contract SafetyFirst is Ownable {
 
         // We now record the user has done this, so they can't do it again (proof of uniqueness)
         nullifierHashes[nullifierHash] = true;
-        emit Claimed(_victim, amount);
+        emit Claimed(signal, amount);
     }
 
     function changeOccurrence(
