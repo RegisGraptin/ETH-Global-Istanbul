@@ -7,7 +7,15 @@ We introduced a donation process by introducing a user-friendly monthly subscrip
 Finally, SafetyFirst goes beyond financial aid; we've implemented an innovative alerting system for real-time communication during disasters. Victims can use the platform to notify the community about their need for assistance. Individuals willing to help can also use the system to offer their support to those affected, fostering a sense of community-driven aid.
 
 
-## SafetyFirst Smart Contract
+## Managing Disaster - Smart Contract
+
+A smart contract centralized the list of disasters allowing anyone to see the current natural disaster that have occured around the world.
+
+To manage those natural disaster, we have two mechanism: 
+- A centtral authority can create a new natural disaster event, and prepare financial assistance for that.
+- We receive a Chainlink trigger that fetching information from an API that provide real-time natural disaster information. Thus, when a new one appear, it creates a new natural disaster inside our smart contract. (Implementation In Progress)
+
+For our smart contract, we deployed it on mumbai. Here you can find information about it:
 
 USDC test token (free mint, verified)
 https://mumbai.polygonscan.com/address/0x25d6043b08892cC5f96A44f423Ac614379DBf27f
@@ -15,16 +23,23 @@ https://mumbai.polygonscan.com/address/0x25d6043b08892cC5f96A44f423Ac614379DBf27
 SafetyFirst test contract v.1 (verified)
 https://mumbai.polygonscan.com/address/0xd804562F11140d330456A68665BD6e0e19636e48
 
-## The Graph
-Build completed: QmXj9NxAqePuGADcC2XynbCedibwGrkwDBbnnG95E9wZUT
 
-Deployed to https://thegraph.com/studio/subgraph/safetyfirst
+
+## Indexing Natural Disaster - The Graph
+
+To have access to the natural disaster information, we are using the Graph. This provided us an efficient ways to retrieve those data and show it to the end user.
+
+Here some information use on the graph implementation:
+
+> Build completed: QmXj9NxAqePuGADcC2XynbCedibwGrkwDBbnnG95E9wZUT
+> Deployed to https://thegraph.com/studio/subgraph/safetyfirst
 
 Subgraph endpoints:
-Queries (HTTP): https://api.studio.thegraph.com/query/54169/safetyfirst/v.0.0.1
+> Queries (HTTP): https://api.studio.thegraph.com/query/54169/safetyfirst/v.0.0.1
 
 Query name: DisastersList
 Query:
+```
 {
   disasterRegistereds(orderBy: disasterId, orderDirection: desc) {
     disasterId
@@ -33,6 +48,7 @@ Query:
     disaster_evidence
   }
 }
+```
 
 ## Monthly subscription system 
 
@@ -47,3 +63,11 @@ Chainlink Upkeep address: `0x8B7D44941025FFfd53a054405B96A6b256efA329`
 More Information:
 > https://automation.chain.link/mumbai/84420421238104438344157666514217813826547256944855569444703227161725687943734
 
+
+## Real-Time Alerting System 
+
+In some areas, the information is not shared as quickly as we would like. We proposed a real-time alerting system allowing people to share an event that is currently happening. Some natural disasters occurred without notice. This system allows people to communicate his position and to share what is currently happening. 
+
+We are using Waku to share the current position of the person and additional information as the type of event. Also, we were thinking about using this solution to share if some people needs assistances and those that are ready to offer help to the community. 
+
+In future version, we were also thinking about integrating a notification system through mobile phone as some area does not have internet connection.
