@@ -19,8 +19,6 @@ import GoogleMapReact from 'google-map-react';
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
-
-
 const Waku: NextPage = () => {
 
   const [node, setNode] = useState<LightNode>();
@@ -33,8 +31,13 @@ const Waku: NextPage = () => {
 
   let subscribed = false;
 
+  const parseTimestampToDate = (timestamp) => {
+    const date = new Date(timestamp);
+    return date.toLocaleString(); // Adjust the format as needed
+  };
+
   // Choose a content topic
-  const contentTopic = "/light-guide/1/message/proto";
+  const contentTopic = "/safety-first/1/alerting";
 
   async function createLightClient() {
     // Create and start a Light Node
@@ -77,7 +80,7 @@ const Waku: NextPage = () => {
   }, []);
 
   async function getMessages() {
-    
+
     subscribed = true;
 
     const decoder = createDecoder(contentTopic);
@@ -93,6 +96,10 @@ const Waku: NextPage = () => {
       console.log(messageObj);
 
       messages.push(messageObj);
+
+      setMessages((messages) => [...messages, messageObj]);
+
+      console.log(messages);
     };
 
     // Create a filter subscription
@@ -106,7 +113,7 @@ const Waku: NextPage = () => {
     getMessages();
   }
 
-  
+
 
   const defaultProps = {
     center: {
@@ -120,84 +127,130 @@ const Waku: NextPage = () => {
     <>
       <MetaHeader />
       <div>
-        <h2>Chat</h2>
+        <section className="flex">
 
-          <section className="flex">
+          <div style={{ height: '100vh', width: '50%' }}>
+            <GoogleMapReact
+              bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY }}
+              defaultCenter={defaultProps.center}
+              defaultZoom={defaultProps.zoom}
+            >
 
-        <div style={{ height: '100vh', width: '50%' }}>
-          <GoogleMapReact
-            bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY }}
-            defaultCenter={defaultProps.center}
-            defaultZoom={defaultProps.zoom}
-          >
-            
-            {messages.map((data, i) => {
-              <AnyReactComponent
-                lat={data.latitude}
-                lng={data.longitude}
-                text={data.event}
-              />
-            })}
+              {messages && messages.map((data, index) => (
 
-          
+                <AnyReactComponent
+                  key={index}
+                  lat={data.latitude}
+                  lng={data.longitude}
+                  text={data.event}
+                />
+              ))}
 
-          </GoogleMapReact>
-        </div>
 
-          <div>
+
+            </GoogleMapReact>
+          </div>
+
+          <div style={{ height: '100vh', width: '50%' }}>
             <h2>Add new Alert</h2>
 
             <div class="grid gap-6 mb-6 md:grid-cols-2">
               <div>
-                  <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Latitude</label>
-                  <input 
-                    type="text" id="first_name" 
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                    placeholder="John" 
-                    required 
-                    value={latitude}
-                  />
+                <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Latitude</label>
+                <input
+                  type="text" id="first_name"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="John"
+                  required
+                  value={latitude}
+                  onChange={(e) => setLatitude(e.target.value)}
+                />
               </div>
 
               <div>
-                  <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Longitude</label>
-                  <input 
-                    type="text" id="first_name" 
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                    placeholder="John" 
-                    required 
-                    value={longitude}
-                  />
+                <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Longitude</label>
+                <input
+                  type="text" id="first_name"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="John"
+                  required
+                  value={longitude}
+                  onChange={(e) => setLongitude(e.target.value)}
+                />
               </div>
 
 
               <div>
-                  <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Event</label>
-                  <input 
-                    type="text" id="first_name" 
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                    placeholder="John" 
-                    required 
-                    value={event}
-                  />
+                <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Event</label>
+                <input
+                  type="text" id="first_name"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="John"
+                  required
+                  value={event}
+                  onChange={(e) => setEvent(e.target.value)}
+                />
               </div>
 
 
-                <button
-                  onClick={() => {
-                    sendMessage();
-                  }}
-                >
-                  Send message
-                </button>
-
+              <button
+                onClick={() => {
+                  sendMessage();
+                }}
+              >
+                Send an alert
+              </button>
 
             </div>
-            
 
+            <div>
+              <h2>Show events</h2>
+
+              <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                  <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                      <th scope="col" className="px-6 py-3">
+                        Date
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Latitude
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Longitude
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Type of event
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    {messages && messages.map((item, index) => (
+                      <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                          {parseTimestampToDate(item.timestamp)}
+                        </th>
+                        <td className="px-6 py-4">
+                          {item.latitude}
+                        </td>
+                        <td className="px-6 py-4">
+                          {item.longitude}
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
+                            {item.event}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
           </div>
-
-          </section>
+        </section>
 
       </div>
     </>
