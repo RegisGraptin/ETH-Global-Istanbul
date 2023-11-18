@@ -1,5 +1,14 @@
 # ETH-Global-Istanbul
 
+## SafetyFirst Smart Contract
+
+USDC test token (free mint, verified)
+https://mumbai.polygonscan.com/address/0x25d6043b08892cC5f96A44f423Ac614379DBf27f
+
+SafetyFirst test contract v.1 (not verified) ⬇️
+https://mumbai.polygonscan.com/address/0xd804562F11140d330456A68665BD6e0e19636e48
+
+
 
 ## Monthly subscription system 
 
@@ -13,5 +22,4 @@ Chainlink Upkeep address: `0x8B7D44941025FFfd53a054405B96A6b256efA329`
 
 More Information:
 > https://automation.chain.link/mumbai/84420421238104438344157666514217813826547256944855569444703227161725687943734
-
 
