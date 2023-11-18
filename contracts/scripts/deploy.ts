@@ -1,25 +1,14 @@
-import { formatEther, parseEther } from "viem";
 import hre from "hardhat";
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = BigInt(currentTimestampInSeconds + 60);
 
-  const lockedAmount = parseEther("0.001");
-
-  const lock = await hre.viem.deployContract("Lock", [unlockTime], {
-    value: lockedAmount,
-  });
+  const sf = await hre.viem.deployContract("SafetyFirst", ["0x57f928158C3EE7CDad1e4D8642503c4D0201f611","app_ca49010ff2c9b0c665b5c9c7f1b4e303","0x299e82279A5F30F9D8b747Bc41a7EEb405a72Dd8"]);
 
   console.log(
-    `Lock with ${formatEther(
-      lockedAmount
-    )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
+    `SafetyFirst deployed to ${sf.address}`
   );
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
 main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
