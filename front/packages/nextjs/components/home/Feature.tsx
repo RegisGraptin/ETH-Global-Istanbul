@@ -8,7 +8,8 @@ export const Feature = () => {
 
   return (
     <>
-      <section className="container mx-auto">
+    <div className="bg-base-300">
+      <section className="container mx-auto pb-5 pt-5">
         <article className="columns-2 my-20">
           <article>
             <img src="/images/image_1.jpg" className="mx-auto object-cover rounded-lg shadow-xl dark:shadow-gray-800 h-auto max-w-xl" />
@@ -28,7 +29,7 @@ export const Feature = () => {
         </article>
       </section>
 
-      <section className="container mx-auto mt-10 mb-20">
+      <section className="container mx-auto pt-10 pb-10">
         <article className="columns-2 my-20">
           <article>
             <h1 className="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
@@ -47,7 +48,7 @@ export const Feature = () => {
           </article>
         </article>
       </section>
-
+      </div>
     </>
   );
 };

@@ -30,3 +30,68 @@ p {
 .btn.btn-ghost {
   @apply shadow-none;
 }
+
+.presentation-background {
+  height: 500px;
+  /* background-color: #febd2e; */
+
+
+  margin-left: 7px;
+  margin-right: 7px;
+  /* margin-top: 7px; */
+
+  border-radius: 30px;
+
+  min-height: 850px;
+  height: 60vh;
+
+  background: url("../public/images/main.jpg") no-repeat center center;
+  background-size: cover;
+  position: relative;
+}
+
+.presentation_gradient_colors {
+  width: 100%;
+  height: 100%;
+  /* // background: rgba(2, 0, 36, 0.6); */
+  /* background-image: linear-gradient(
+      to right bottom, 
+      rgba(3,0,61,0.5), 
+      rgba(24,20,87,0.6), 
+      rgba(49,36,113,0.7), 
+      rgba(73,53,141,0.6), 
+      rgba(98,71,170,0.5)
+  ); */
+
+  background: rgb(2,0,36);
+  background: linear-gradient(30deg, rgba(2,0,36,0.5) 0%, rgba(42,54,85,0.5) 35%, rgba(0,212,255,0.5) 100%); 
+  color: white;
+}
+
+.presentation-content-layer {
+  padding-left: 100px;
+  padding-right: 100px;
+  padding-top: 10px;
+}
+
+
+h1.landing-title {
+  font-size: 80px;
+  line-height: 80px;
+  padding-bottom: 30px;
+}
+
+h1.landing-title>.shift-name {
+  padding-left: 50px;
+}
+
+
+.presentation-content {
+  padding-top: 50px;
+  width: 700px;
+}
+
+.max-height {
+  height: 100%;
+  padding-bottom: 0;
+}

@@ -9,15 +9,9 @@ import { AlertMessage } from "~~/components/waku/AlertMessage";
 import { useEffect, useMemo, useState } from "react";
 import { Reader } from "protobufjs";
 
-
-
-
 import React from "react";
 import GoogleMapReact from 'google-map-react';
 
-
-
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 const Waku: NextPage = () => {
 

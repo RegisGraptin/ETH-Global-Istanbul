@@ -9,12 +9,45 @@ const Home: NextPage = () => {
   return (
     <>
       <MetaHeader />
+
+      <div className="presentation-background">
+        <div className="presentation_gradient_colors">
+          <div className="presentation-content-layer container mx-auto max-height relative">
+            <section className="presentation-content">
+              <article>
+                <h1 className="landing-title">
+                  <img src="/logo.png" alt="logo" />
+                  Safety<br />
+                  <span className="shift-name">First</span>
+                </h1>
+                <p className="pt-5 text-4xl font-bold dark:text-white">Help people victims from natural disasters</p>
+
+                <div
+                  className="inline-block mt-5 white-button focus:!bg-secondary active:!text-neutral max-w-sm shadow-lg rounded-xl">
+                  <div className="py-3 pl-5 pr-5 text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                  <Link href="/donation" passHref className="hidden lg:flex items-center gap-2 ml-4 mr-6 shrink-0">
+                    Contribute / Donate
+                  </Link>
+                  </div>
+                </div>
+              </article>
+            </section>
+          </div>
+        </div>
+      </div>
+
+      <Disaster />
+
+      <Feature />
+
+
+
       <div className="flex items-center flex-col flex-grow pt-10">
         <div className="px-5">
           <h1 className="text-center mb-8">
             <span className="block text-4xl font-bold">Safety First</span>
           </h1>
-          <p className="text-center text-lg">Provide funds for those in need.</p>
+          <p className="text-center text-lg">Be actor and contribute.</p>
           <p className="text-center text-lg">
             Help people by providing funds to them when an natural disaster has occurred.
           </p>
@@ -45,10 +78,6 @@ const Home: NextPage = () => {
             </div>
           </div>
         </div>
-
-        <Disaster />
-
-        <Feature />
 
       </div>
     </>
