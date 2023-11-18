@@ -23,6 +23,7 @@ const Waku: NextPage = () => {
 
   const [node, setNode] = useState<LightNode>();
   const [messages, setMessages] = useState([]);
+  const [map, setMap] = useState();
 
 
   const [latitude, setLatitude] = useState<string>("10.99835602");
@@ -53,7 +54,7 @@ const Waku: NextPage = () => {
   async function sendMessage() {
 
     // Create a message encoder and decoder
-    const encoder = createEncoder({ contentTopic });
+    const encoder = createEncoder({ contentTopic, ephemeral: true });
 
     // Create a new message object
     const protoMessage = AlertMessage.create({
@@ -99,20 +100,38 @@ const Waku: NextPage = () => {
 
       setMessages((messages) => [...messages, messageObj]);
 
-      console.log(messages);
+
+      const myLatLng = { lat: Number(messageObj.latitude), lng: Number(messageObj.longitude) };      
+      new google.maps.Marker({
+        position: myLatLng,
+        map,
+        title: messageObj.event,
+      });
     };
 
     // Create a filter subscription
     const subscription = await node?.filter.createSubscription();
-
-    // Subscribe to content topics and process new messages
-    await subscription?.subscribe([decoder], callback);
+    
+    try {
+      // Subscribe to content topics and process new messages
+      await subscription?.subscribe([decoder], callback);
+    } catch (err) {
+      console.log("Crash peer to peer network")
+      console.log(err);
+    }
+    
   }
 
   if (!subscribed) {
     getMessages();
   }
 
+
+
+  // Set the map in the state
+  const handleApiLoaded = (map, maps) => {
+    setMap(map);
+  };
 
 
   const defaultProps = {
@@ -134,32 +153,21 @@ const Waku: NextPage = () => {
               bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_API_KEY }}
               defaultCenter={defaultProps.center}
               defaultZoom={defaultProps.zoom}
+              yesIWantToUseGoogleMapApiInternals
+              onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
             >
-
-              {messages && messages.map((data, index) => (
-
-                <AnyReactComponent
-                  key={index}
-                  lat={data.latitude}
-                  lng={data.longitude}
-                  text={data.event}
-                />
-              ))}
-
-
-
             </GoogleMapReact>
           </div>
 
-          <div style={{ height: '100vh', width: '50%' }}>
-            <h2>Add new Alert</h2>
+          <div className="mt-50 m-5" style={{ height: '100vh', width: '50%' }}>
+            <h2 className="text-4xl font-extrabold dark:text-white">Monitor Alerts</h2>
 
-            <div class="grid gap-6 mb-6 md:grid-cols-2">
+            <div className="grid gap-6 mb-6 md:grid-cols-2">
               <div>
-                <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Latitude</label>
+                <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Latitude</label>
                 <input
                   type="text" id="first_name"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="John"
                   required
                   value={latitude}
@@ -168,10 +176,10 @@ const Waku: NextPage = () => {
               </div>
 
               <div>
-                <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Longitude</label>
+                <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Longitude</label>
                 <input
                   type="text" id="first_name"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="John"
                   required
                   value={longitude}
@@ -181,10 +189,10 @@ const Waku: NextPage = () => {
 
 
               <div>
-                <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Event</label>
+                <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Event</label>
                 <input
                   type="text" id="first_name"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="John"
                   required
                   value={event}
@@ -194,6 +202,7 @@ const Waku: NextPage = () => {
 
 
               <button
+                type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 px-5 py-2.5 me-2 mt-5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                 onClick={() => {
                   sendMessage();
                 }}
@@ -206,7 +215,7 @@ const Waku: NextPage = () => {
             <div>
               <h2>Show events</h2>
 
-              <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+              <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                   <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
@@ -227,7 +236,7 @@ const Waku: NextPage = () => {
                   <tbody>
 
                     {messages && messages.map((item, index) => (
-                      <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                      <tr key={index} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                           {parseTimestampToDate(item.timestamp)}
                         </th>
