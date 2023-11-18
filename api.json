@@ -1,0 +1,253 @@
+{
+    "time": 10,
+    "took": 4,
+    "totalCount": 3460,
+    "count": 10,
+    "data": [
+        {
+            "id": "51813",
+            "score": 1,
+            "fields": {
+                "name": "Malaysia: Dengue Outbreak - Nov 2023",
+                "status": "ongoing",
+                "glide": "EP-2023-000221-MYS",
+                "country": [
+                    {
+                        "name": "Malaysia"
+                    }
+                ],
+                "type": [
+                    {
+                        "name": "Epidemic"
+                    }
+                ],
+                "url": "https:\/\/reliefweb.int\/taxonomy\/term\/51813",
+                "date": {
+                    "created": "2023-11-17T13:03:40+00:00"
+                }
+            }
+        },
+        {
+            "id": "51810",
+            "score": 1,
+            "fields": {
+                "name": "Tropical Cyclone Mal - Nov 2023",
+                "status": "ongoing",
+                "glide": "TC-2023-000219-FJI",
+                "country": [
+                    {
+                        "name": "Fiji"
+                    },
+                    {
+                        "name": "Solomon Islands"
+                    }
+                ],
+                "type": [
+                    {
+                        "name": "Tropical Cyclone"
+                    }
+                ],
+                "url": "https:\/\/reliefweb.int\/taxonomy\/term\/51810",
+                "date": {
+                    "created": "2023-11-15T14:45:04+00:00"
+                }
+            }
+        },
+        {
+            "id": "51805",
+            "score": 1,
+            "fields": {
+                "name": "Niger: Diphtheria Outbreak - Oct 2023",
+                "status": "ongoing",
+                "glide": "EP-2023-000223-NER",
+                "country": [
+                    {
+                        "name": "Niger"
+                    }
+                ],
+                "type": [
+                    {
+                        "name": "Epidemic"
+                    }
+                ],
+                "url": "https:\/\/reliefweb.int\/taxonomy\/term\/51805",
+                "date": {
+                    "created": "2023-11-11T12:03:12+00:00"
+                }
+            }
+        },
+        {
+            "id": "51804",
+            "score": 1,
+            "fields": {
+                "name": "Paraguay: Floods - Oct 2023",
+                "status": "ongoing",
+                "glide": "FL-2023-000217-PRY",
+                "country": [
+                    {
+                        "name": "Paraguay"
+                    }
+                ],
+                "type": [
+                    {
+                        "name": "Flood"
+                    }
+                ],
+                "url": "https:\/\/reliefweb.int\/taxonomy\/term\/51804",
+                "date": {
+                    "created": "2023-11-11T03:21:44+00:00"
+                }
+            }
+        },
+        {
+            "id": "51802",
+            "score": 1,
+            "fields": {
+                "name": "Ghana: Floods - Oct 2023",
+                "status": "ongoing",
+                "glide": "FL-2023-000215-GHA",
+                "country": [
+                    {
+                        "name": "Ghana"
+                    }
+                ],
+                "type": [
+                    {
+                        "name": "Flood"
+                    }
+                ],
+                "url": "https:\/\/reliefweb.int\/taxonomy\/term\/51802",
+                "date": {
+                    "created": "2023-11-08T00:36:38+00:00"
+                }
+            }
+        },
+        {
+            "id": "51801",
+            "score": 1,
+            "fields": {
+                "name": "Ethiopia: Floods - Nov 2023",
+                "status": "ongoing",
+                "glide": "FL-2023-000229-ETH",
+                "country": [
+                    {
+                        "name": "Ethiopia"
+                    }
+                ],
+                "type": [
+                    {
+                        "name": "Flash Flood"
+                    },
+                    {
+                        "name": "Flood"
+                    }
+                ],
+                "url": "https:\/\/reliefweb.int\/taxonomy\/term\/51801",
+                "date": {
+                    "created": "2023-11-07T13:48:42+00:00"
+                }
+            }
+        },
+        {
+            "id": "51799",
+            "score": 1,
+            "fields": {
+                "name": "Kenya: Floods - Oct 2023",
+                "status": "ongoing",
+                "glide": "FL-2023-000216-KEN",
+                "country": [
+                    {
+                        "name": "Kenya"
+                    }
+                ],
+                "type": [
+                    {
+                        "name": "Flash Flood"
+                    },
+                    {
+                        "name": "Flood"
+                    }
+                ],
+                "url": "https:\/\/reliefweb.int\/taxonomy\/term\/51799",
+                "date": {
+                    "created": "2023-11-06T12:47:34+00:00"
+                }
+            }
+        },
+        {
+            "id": "51797",
+            "score": 1,
+            "fields": {
+                "name": "Nepal: Earthquake - Nov 2023",
+                "status": "ongoing",
+                "glide": "EQ-2023-000214-NPL",
+                "country": [
+                    {
+                        "name": "Nepal"
+                    }
+                ],
+                "type": [
+                    {
+                        "name": "Earthquake"
+                    }
+                ],
+                "url": "https:\/\/reliefweb.int\/taxonomy\/term\/51797",
+                "date": {
+                    "created": "2023-11-04T10:15:18+00:00"
+                }
+            }
+        },
+        {
+            "id": "51780",
+            "score": 1,
+            "fields": {
+                "name": "Tropical Cyclone Tej - Oct 2023",
+                "status": "ongoing",
+                "glide": "TC-2023-000212-YEM",
+                "country": [
+                    {
+                        "name": "Yemen"
+                    }
+                ],
+                "type": [
+                    {
+                        "name": "Flood"
+                    },
+                    {
+                        "name": "Tropical Cyclone"
+                    }
+                ],
+                "url": "https:\/\/reliefweb.int\/taxonomy\/term\/51780",
+                "date": {
+                    "created": "2023-10-27T07:34:06+00:00"
+                }
+            }
+        },
+        {
+            "id": "51779",
+            "score": 1,
+            "fields": {
+                "name": "Tropical Cyclone Lola - Oct 2023",
+                "status": "ongoing",
+                "glide": "TC-2023-000207-VUT",
+                "country": [
+                    {
+                        "name": "Solomon Islands"
+                    },
+                    {
+                        "name": "Vanuatu"
+                    }
+                ],
+                "type": [
+                    {
+                        "name": "Tropical Cyclone"
+                    }
+                ],
+                "url": "https:\/\/reliefweb.int\/taxonomy\/term\/51779",
+                "date": {
+                    "created": "2023-10-27T02:28:33+00:00"
+                }
+            }
+        }
+    ]
+}
