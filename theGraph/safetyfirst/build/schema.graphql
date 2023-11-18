@@ -1,0 +1,46 @@
+type Claimed @entity(immutable: true) {
+  id: Bytes!
+  victim: Bytes! # address
+  amount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type DisasterRegistered @entity(immutable: true) {
+  id: Bytes!
+  disasterId: BigInt! # uint256
+  status: Boolean! # bool
+  disaster_category: String! # string
+  disaster_location: String! # string
+  disaster_evidence: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OccurrenceChanged @entity(immutable: true) {
+  id: Bytes!
+  disasterId: BigInt! # uint256
+  occurrence: Boolean! # bool
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OwnershipTransferred @entity(immutable: true) {
+  id: Bytes!
+  previousOwner: Bytes! # address
+  newOwner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type TokenChanged @entity(immutable: true) {
+  id: Bytes!
+  newToken: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
