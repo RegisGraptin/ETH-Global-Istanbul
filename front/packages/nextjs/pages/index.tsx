@@ -42,18 +42,14 @@ const Home: NextPage = () => {
 
 
 
-      <div className="flex items-center flex-col flex-grow pt-10">
-        <div className="px-5">
-          <h1 className="text-center mb-8">
-            <span className="block text-4xl font-bold">Safety First</span>
-          </h1>
-          <p className="text-center text-lg">Be actor and contribute.</p>
-          <p className="text-center text-lg">
-            Help people by providing funds to them when an natural disaster has occurred.
-          </p>
-        </div>
+      <div className="flex items-center flex-col flex-grow">
 
-        <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
+        <div className="flex-grow bg-base-300 w-full pb-12 pt-12 px-8 py-12">
+
+        <h1 className="text-center mb-12">
+          <span className="block text-4xl font-bold">See other features</span>
+        </h1>
+
           <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">
             <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
               <BugAntIcon className="h-8 w-8 fill-secondary" />
@@ -76,6 +72,20 @@ const Home: NextPage = () => {
                 </Link>
               </p>
             </div>
+
+
+            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
+              <BugAntIcon className="h-8 w-8 fill-secondary" />
+              <p>
+                Real-Time Alerting System
+                <br />
+                <Link href="/waku" passHref className="link">
+                  Alert
+                </Link>
+              </p>
+            </div>
+
+
           </div>
         </div>
 
