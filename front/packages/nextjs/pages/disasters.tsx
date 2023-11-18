@@ -105,7 +105,7 @@ const Disaster: NextPage = () => {
   return (
     <>
       {domLoaded && (
-        <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
+        <div className="flex-grow bg-base-300 w-full pt-16 px-8 py-12">
           <h1 className="text-center mb-8">
             <span className="block text-4xl font-bold">Current Natural Disasters</span>
           </h1>
